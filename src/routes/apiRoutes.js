@@ -1,3 +1,4 @@
+// src/routes/apiRoutes.js
 const express = require('express');
 const router = express.Router();
 
@@ -8,19 +9,23 @@ const {
     getDishById,
     updateDish,
     deleteDish
-} = require('../controllers/dishController')
-const { create } = require('../models/dishModel');
+} = require('../controllers/dishController');
 
-router.get('/dishes', getAllDishes);          // GET all dishes
+const { protect, authorize } = require('../middleware/authMiddleware');
 
-router.post('/dishes', createDish);   
+// Root of /api/v1
+router.get('/', (req, res) => res.send('✅ API v1 is working!'));
 
-router.post('/chefs', createChef);   
+// Dishes routes
+router.get('/dishes', getAllDishes); // Anyone can view
+router.get('/dishes/:id', getDishById); // Anyone can view
 
-router.get('/dishes/:id', getDishById);      // GET a dish by ID
+// Protected routes — only Admins and Managers can modify data
+router.post('/dishes', protect, authorize('admin', 'manager'), createDish);
+router.put('/dishes/:id', protect, authorize('admin', 'manager'), updateDish);
+router.delete('/dishes/:id', protect, authorize('admin', 'manager'), deleteDish);
 
-router.put('/dishes/:id', updateDish);       // UPDATE a dish by ID
-
-router.delete('/dishes/:id', deleteDish);    // DELETE a dish by ID
+// Chefs route — also protected
+router.post('/chefs', protect, authorize('admin', 'manager'), createChef);
 
 module.exports = router;
