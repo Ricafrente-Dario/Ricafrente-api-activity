@@ -4,14 +4,18 @@ const router = express.Router();
 const {
     getAllDishes,
     createDish,
+    createChef,
     getDishById,
     updateDish,
     deleteDish
-} = require('../controllers/dishController');
+} = require('../controllers/dishController')
+const { create } = require('../models/dishModel');
 
 router.get('/dishes', getAllDishes);          // GET all dishes
 
-router.post('/dishes', createDish);          // CREATE a new dish
+router.post('/dishes', createDish);   
+
+router.post('/chefs', createChef);   
 
 router.get('/dishes/:id', getDishById);      // GET a dish by ID
 

@@ -20,6 +20,15 @@ const createDish = async (req, res) => {
     }
 };
 
+const createChef = async (req, res) => {
+    try {
+        const newChef = await Chef.create(req.body);
+        res.status(201).json(newChef);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }   
+};
+
 // 3. GET ONE: Find a specific food by ID
 const getDishById = async (req, res) => {
     try {
@@ -67,6 +76,7 @@ const deleteDish = async (req, res) => {
 module.exports = {
     getAllDishes,
     createDish,
+    createChef,
     getDishById,
     updateDish,
     deleteDish,
